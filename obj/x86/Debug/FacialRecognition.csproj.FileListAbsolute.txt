@@ -1,0 +1,15 @@
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\FacialRecognition.exe
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\FacialRecognition.pdb
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\Emgu.CV.dll
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\Emgu.CV.UI.dll
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\Emgu.Util.dll
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\Emgu.CV.xml
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\Emgu.CV.UI.xml
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\bin\Debug\Emgu.Util.xml
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\FacialRecognition.Properties.Resources.resources
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\FacialRecognition.exe
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\FacialRecognition.pdb
+c:\users\cory.nance\documents\visual studio 2010\Projects\FacialRecognition\FacialRecognition\obj\x86\Debug\FacialRecognition.faceRecognition.resources
