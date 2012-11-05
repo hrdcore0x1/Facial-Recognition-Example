@@ -36,6 +36,7 @@ namespace FacialRecognition
         private string filePath;
         private double scale;
         private double epsilon;
+        private int minNeighbors;
 
         public faceRecognition()
         {
@@ -54,8 +55,10 @@ namespace FacialRecognition
             current = null;
             filePath = string.Empty;
             btnDetect.Enabled = false;
+            chkboxDetectFaces.Enabled = false;
             scale = Double.Parse(txtScale.Text);
             epsilon = Double.Parse(txtEpsilon.Text);
+            minNeighbors = Int32.Parse(txtMinNeighbors.Text);
         }
 
         private void btnGrabber_Click(object sender, EventArgs e)
@@ -69,6 +72,7 @@ namespace FacialRecognition
                 btnLoad.Enabled = false;
                 btnDetect.Enabled = false;
                 btnTrain.Enabled = true;
+                chkboxDetectFaces.Enabled = true;
             }
             else if (btnGrabber.Text == "Stop Webcam")
             {
@@ -77,6 +81,7 @@ namespace FacialRecognition
                 grab.Dispose();
                 btnLoad.Enabled = true;
                 btnTrain.Enabled = false;
+                chkboxDetectFaces.Enabled = false;
             }
 
         }
@@ -91,7 +96,7 @@ namespace FacialRecognition
             {
                 Image<Gray, byte> grayScale = current.Convert<Gray, byte>();
 
-                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, scale, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, scale, minNeighbors, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
                 foreach (MCvAvgComp d in detected[0])
                 {
                     current.Draw(d.rect, new Bgr(Color.LawnGreen), 2);
@@ -120,7 +125,7 @@ namespace FacialRecognition
                 current = grab.QueryFrame().Resize(300, 250, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
             }
             Image<Gray, byte> train = current.Convert<Gray, byte>();
-            MCvAvgComp[][] detected = train.DetectHaarCascade(face, scale, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+            MCvAvgComp[][] detected = train.DetectHaarCascade(face, scale, minNeighbors, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));  //20x20 default for faces
             if (detected[0].Length < 1)
             {
                 MessageBox.Show("There aren't any faces to train!");
@@ -178,7 +183,7 @@ namespace FacialRecognition
             current = new Image<Bgr, byte>(filePath).Resize(300, 250, INTER.CV_INTER_CUBIC);
             Image<Gray, byte> grayScale = current.Convert<Gray, byte>();
 
-                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, scale, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, scale, minNeighbors, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
                 foreach (MCvAvgComp d in detected[0])
                 {
                     current.Draw(d.rect, new Bgr(Color.LawnGreen), 2);
@@ -235,6 +240,23 @@ namespace FacialRecognition
                 txtEpsilon.Text = "" + epsilon;
             }
         }
+
+
+        private void txtMinNeighbors_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                int tmp = Int32.Parse(txtMinNeighbors.Text);
+                minNeighbors = tmp;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                txtMinNeighbors.Text = "" + minNeighbors;
+            }
+        }
+
+
 
 
 
