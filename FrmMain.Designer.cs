@@ -66,9 +66,10 @@
             // 
             // picWebCam
             // 
-            this.picWebCam.Location = new System.Drawing.Point(24, 46);
+            this.picWebCam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picWebCam.Location = new System.Drawing.Point(23, 61);
             this.picWebCam.Name = "picWebCam";
-            this.picWebCam.Size = new System.Drawing.Size(300, 300);
+            this.picWebCam.Size = new System.Drawing.Size(300, 250);
             this.picWebCam.TabIndex = 1;
             this.picWebCam.TabStop = false;
             // 
@@ -97,18 +98,20 @@
             this.picTraining.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picTraining.Location = new System.Drawing.Point(30, 39);
             this.picTraining.Name = "picTraining";
-            this.picTraining.Size = new System.Drawing.Size(100, 108);
+            this.picTraining.Size = new System.Drawing.Size(100, 100);
             this.picTraining.TabIndex = 4;
             this.picTraining.TabStop = false;
             // 
             // lstTraining
             // 
+            this.lstTraining.BackColor = System.Drawing.SystemColors.MenuBar;
             this.lstTraining.FormattingEnabled = true;
             this.lstTraining.Location = new System.Drawing.Point(147, 39);
             this.lstTraining.Name = "lstTraining";
-            this.lstTraining.Size = new System.Drawing.Size(93, 108);
+            this.lstTraining.Size = new System.Drawing.Size(100, 95);
             this.lstTraining.TabIndex = 5;
             this.lstTraining.SelectedIndexChanged += new System.EventHandler(this.lstTraining_SelectedIndexChanged);
+            this.lstTraining.DoubleClick += new System.EventHandler(lstTraining_DoubleClick);
             // 
             // btnLoad
             // 
@@ -205,7 +208,7 @@
             this.txtScale.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtScale.Size = new System.Drawing.Size(32, 20);
             this.txtScale.TabIndex = 4;
-            this.txtScale.Text = "1.2";
+            this.txtScale.Text = "1.1";
             this.txtScale.Leave += new System.EventHandler(this.txtScale_Leave);
             // 
             // label2
@@ -235,7 +238,6 @@
             this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "HAAR Cascade File";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtCascadeFile
             // 

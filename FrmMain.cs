@@ -141,7 +141,8 @@ namespace FacialRecognition
 
         private void lstTraining_SelectedIndexChanged(object sender, EventArgs e)
         {
-            picTraining.Image = trainingImgs[lstTraining.SelectedIndex].ToBitmap();
+            if (trainingImgs.Count > 0) picTraining.Image = trainingImgs[lstTraining.SelectedIndex].ToBitmap();
+            else picTraining.Image = null;
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -153,6 +154,23 @@ namespace FacialRecognition
             btnTrain.Enabled = true;
             current = new Image<Bgr, byte>(filePath).Resize(300, 250, INTER.CV_INTER_CUBIC);
             picWebCam.Image = current.ToBitmap();
+        }
+
+        private void lstTraining_DoubleClick(object sender, EventArgs e)
+        {
+            if (lstTraining.SelectedIndex == -1) return;
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete this entry?", "Delete?", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                int index = lstTraining.SelectedIndex;
+                trainingImgs.RemoveAt(index);
+                trainingNames.RemoveAt(index);
+                if (trainingImgs.Count > 0) lstTraining.SelectedIndex = trainingImgs.Count - 1;
+                
+                lstTraining.Items.RemoveAt(index);
+                
+            }
+            //else do nothing
         }
 
         private void btnDetect_Click(object sender, EventArgs e)
@@ -177,10 +195,6 @@ namespace FacialRecognition
             picWebCam.Image = current.ToBitmap();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnBrowseHAAR_Click(object sender, EventArgs e)
         {
