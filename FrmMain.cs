@@ -34,6 +34,8 @@ namespace FacialRecognition
         private List<string> trainingNames;
         private Image<Bgr, byte> current;
         private string filePath;
+        private double scale;
+        private double epsilon;
 
         public faceRecognition()
         {
@@ -42,8 +44,9 @@ namespace FacialRecognition
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //face = new HaarCascade("haarcascade_frontalface_default.xml");
-            face = new HaarCascade("C:\\Users\\cory.nance\\Downloads\\haarcascade_frontalface_alt.xml");
+            
+            txtCascadeFile.Text = Application.StartupPath + "\\haarcascade_frontalface_default.xml";
+            face = new HaarCascade(txtCascadeFile.Text);
             btnTrain.Enabled = false;
             trainingImgs = new List<Image<Gray, byte>>();
             trainingNames = new List<string>();
@@ -51,6 +54,8 @@ namespace FacialRecognition
             current = null;
             filePath = string.Empty;
             btnDetect.Enabled = false;
+            scale = Double.Parse(txtScale.Text);
+            epsilon = Double.Parse(txtEpsilon.Text);
         }
 
         private void btnGrabber_Click(object sender, EventArgs e)
@@ -84,17 +89,16 @@ namespace FacialRecognition
 
             if (chkboxDetectFaces.Checked == true)
             {
-
                 Image<Gray, byte> grayScale = current.Convert<Gray, byte>();
 
-                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, scale, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
                 foreach (MCvAvgComp d in detected[0])
                 {
                     current.Draw(d.rect, new Bgr(Color.LawnGreen), 2);
                     if (trainingImgs.Count > 0)
                     {
                         Image<Gray, byte> dFace = current.Copy(d.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
-                        MCvTermCriteria criteria = new MCvTermCriteria(trainingImgs.Count, 0.001);  //count, epsilon value
+                        MCvTermCriteria criteria = new MCvTermCriteria(trainingImgs.Count, epsilon);  //count, epsilon value
                         EigenObjectRecognizer recognize = new EigenObjectRecognizer(trainingImgs.ToArray(), trainingNames.ToArray(), ref criteria);
                         MCvFont font = new MCvFont(FONT.CV_FONT_HERSHEY_TRIPLEX, 1, 1);
                         string name = recognize.Recognize(dFace);
@@ -107,7 +111,6 @@ namespace FacialRecognition
 
         private void btnTrain_Click(object sender, EventArgs e)
         {
-            //current = new Image<Bgr, byte>(new Bitmap(picWebCam.Image));
             if (btnGrabber.Text == "View Webcam")
             {
                 current = new Image<Bgr, byte>(filePath).Resize(300, 250, INTER.CV_INTER_CUBIC);
@@ -117,7 +120,7 @@ namespace FacialRecognition
                 current = grab.QueryFrame().Resize(300, 250, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
             }
             Image<Gray, byte> train = current.Convert<Gray, byte>();
-            MCvAvgComp[][] detected = train.DetectHaarCascade(face, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+            MCvAvgComp[][] detected = train.DetectHaarCascade(face, scale, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
             if (detected[0].Length < 1)
             {
                 MessageBox.Show("There aren't any faces to train!");
@@ -128,32 +131,6 @@ namespace FacialRecognition
                 train = current.Copy(d.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
                 picTraining.Image = train.ToBitmap();
                 string name = Interaction.InputBox("Please enter a name for this person.", Application.ProductName);
-
-                /*
-                if (trainingNames.Contains(name))
-                {
-                    MessageBox.Show(name + " already exist in the training database!");
-                    picTraining.Image = trainingImgs[lstTraining.SelectedIndex].ToBitmap();
-                    return;
-                }
-
-
-                if (trainingImgs.Count > 0)
-                {
-                    MCvTermCriteria criteria = new MCvTermCriteria(trainingImgs.Count, 0.001);  //count, epsilon value
-                    EigenObjectRecognizer recognize = new EigenObjectRecognizer(trainingImgs.ToArray(), trainingNames.ToArray(),0, ref criteria);
-                    string result = recognize.Recognize(train);
-                    if (!String.IsNullOrEmpty(result))
-                    {
-                        MessageBox.Show(name + "'s picture already exist in the training database as " + result + "!");
-       
-                            picTraining.Image = trainingImgs[lstTraining.SelectedIndex].ToBitmap();
-                            return;
-                    
-                    }
-
-                }
-                */
 
                 trainingNames.Add(name);
                 lstTraining.Items.Add(name);
@@ -183,14 +160,14 @@ namespace FacialRecognition
             current = new Image<Bgr, byte>(filePath).Resize(300, 250, INTER.CV_INTER_CUBIC);
             Image<Gray, byte> grayScale = current.Convert<Gray, byte>();
 
-                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                MCvAvgComp[][] detected = grayScale.DetectHaarCascade(face, scale, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
                 foreach (MCvAvgComp d in detected[0])
                 {
                     current.Draw(d.rect, new Bgr(Color.LawnGreen), 2);
                     if (trainingImgs.Count > 0)
                     {
                         Image<Gray, byte> dFace = current.Copy(d.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
-                        MCvTermCriteria criteria = new MCvTermCriteria(trainingImgs.Count, 0.001);  //count, epsilon value
+                        MCvTermCriteria criteria = new MCvTermCriteria(trainingImgs.Count, epsilon);  //count, epsilon value
                         EigenObjectRecognizer recognize = new EigenObjectRecognizer(trainingImgs.ToArray(), trainingNames.ToArray(), 0, ref criteria);
                         MCvFont font = new MCvFont(FONT.CV_FONT_HERSHEY_TRIPLEX, 1, 1);
                         string name = recognize.Recognize(dFace);
@@ -199,6 +176,52 @@ namespace FacialRecognition
                 }
             picWebCam.Image = current.ToBitmap();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBrowseHAAR_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result != DialogResult.OK) return;
+            txtCascadeFile.Text = openFileDialog1.FileName;
+            face = new HaarCascade(txtCascadeFile.Text);
+        }
+
+        private void txtScale_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                double tmp = Double.Parse(txtScale.Text);
+                if (tmp <= 1)
+                {
+                    throw new Exception("The scale must be greater than 1!");
+                }
+                scale = tmp;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                txtScale.Text = "" + scale;
+            }
+        }
+
+        private void txtEpsilon_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                double tmp = Double.Parse(txtEpsilon.Text);
+                epsilon = tmp;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                txtEpsilon.Text = "" + epsilon;
+            }
+        }
+
 
 
     }
