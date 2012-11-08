@@ -16,6 +16,7 @@ using Microsoft.VisualBasic;
  * Author: Cory Nance
  * Professor: Dr. Cook
  * Class: CSCI 7130
+ * Date: 7 Novemeber 2012
  * Artificial Intelligence Semester Project - Facial Recognition
  * 
  * REFERENCES:
@@ -146,7 +147,12 @@ namespace FacialRecognition
 
         private void lstTraining_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (trainingImgs.Count > 0) picTraining.Image = trainingImgs[lstTraining.SelectedIndex].ToBitmap();
+
+            if (trainingImgs.Count > 0)
+            {
+                if (lstTraining.SelectedIndex == -1) lstTraining.SelectedIndex = lstTraining.Items.Count - 1;
+                picTraining.Image = trainingImgs[lstTraining.SelectedIndex].ToBitmap();
+            }
             else picTraining.Image = null;
         }
 
